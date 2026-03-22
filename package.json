@@ -1,0 +1,41 @@
+{
+  "name": "synaptic-decisions",
+  "version": "0.1.0",
+  "description": "AI 코딩 세션에서 의사결정을 자동 추출하여 쿼리 가능한 지식 그래프를 구축하는 CLI 도구",
+  "type": "module",
+  "bin": {
+    "synaptic": "./bin/synaptic.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "claude-code",
+    "decision-record",
+    "adr",
+    "knowledge-graph",
+    "developer-tools",
+    "codebase-intelligence"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.4.0",
+    "commander": "^13.1.0",
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0",
+    "@vitest/coverage-v8": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
