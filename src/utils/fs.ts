@@ -20,11 +20,18 @@ export async function writeTextFile(path: string, content: string): Promise<Resu
   }
 }
 
-export async function readJsonFile<T>(path: string): Promise<Result<T>> {
+export async function readJsonFile<T>(
+  path: string,
+  validate?: (data: unknown) => data is T
+): Promise<Result<T>> {
   const result = await readTextFile(path);
   if (!result.ok) return result;
   try {
-    return { ok: true, value: JSON.parse(result.value) as T };
+    const parsed: unknown = JSON.parse(result.value);
+    if (validate && !validate(parsed)) {
+      return { ok: false, error: new Error(`${path}: 유효하지 않은 데이터 구조`) };
+    }
+    return { ok: true, value: parsed as T };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e : new Error(String(e)) };
   }

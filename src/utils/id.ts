@@ -11,7 +11,6 @@ export function parseDecisionId(id: string): { prefix: string; number: number } 
 export function slugify(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[가-힣]+/g, (match) => match)
     .replace(/[^a-z0-9가-힣\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")

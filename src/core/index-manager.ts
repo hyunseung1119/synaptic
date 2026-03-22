@@ -24,8 +24,19 @@ export function createEmptyIndex(): DecisionIndex {
   };
 }
 
+function isDecisionIndex(data: unknown): data is DecisionIndex {
+  if (typeof data !== "object" || data === null) return false;
+  const obj = data as Record<string, unknown>;
+  return (
+    typeof obj.version === "number" &&
+    typeof obj.lastUpdated === "string" &&
+    Array.isArray(obj.decisions) &&
+    Array.isArray(obj.edges)
+  );
+}
+
 export async function loadIndex(projectRoot: string): Promise<Result<DecisionIndex>> {
-  return readJsonFile<DecisionIndex>(indexPath(projectRoot));
+  return readJsonFile<DecisionIndex>(indexPath(projectRoot), isDecisionIndex);
 }
 
 export async function saveIndex(

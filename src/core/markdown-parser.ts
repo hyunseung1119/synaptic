@@ -1,5 +1,12 @@
 import matter from "gray-matter";
-import type { Decision, Alternative, Result } from "./types.js";
+import type { Decision, Alternative, DecisionStatus, Result } from "./types.js";
+
+const VALID_STATUSES = new Set<string>(["accepted", "superseded", "deprecated", "proposed"]);
+
+function toDecisionStatus(raw: unknown): DecisionStatus {
+  const s = String(raw ?? "proposed");
+  return VALID_STATUSES.has(s) ? (s as DecisionStatus) : "proposed";
+}
 
 export function parseDecisionMarkdown(content: string): Result<Decision> {
   try {
@@ -9,7 +16,7 @@ export function parseDecisionMarkdown(content: string): Result<Decision> {
       id: String(data.id ?? ""),
       title: String(data.title ?? ""),
       date: String(data.date ?? ""),
-      status: data.status ?? "accepted",
+      status: toDecisionStatus(data.status),
       context: extractSection(body, "Context"),
       decision: extractSection(body, "Decision"),
       consequences: extractSection(body, "Consequences"),

@@ -1,3 +1,4 @@
+import { join, basename } from "node:path";
 import type {
   DecisionIndex,
   DecisionIndexEntry,
@@ -46,7 +47,7 @@ export function search(
 
     if (query.files && query.files.length > 0) {
       const matched = query.files.filter((f) =>
-        entry.files.some((ef) => ef.includes(f) || f.includes(ef))
+        entry.files.some((ef) => ef.includes(f))
       );
       if (matched.length > 0) {
         score += matched.length * 8;
@@ -71,7 +72,7 @@ export function searchByFile(
   filePath: string
 ): readonly DecisionIndexEntry[] {
   return index.decisions.filter((d) =>
-    d.files.some((f) => f.includes(filePath) || filePath.includes(f))
+    d.files.some((f) => f.includes(filePath))
   );
 }
 
@@ -94,7 +95,7 @@ export async function searchFullText(
   const kw = keyword.toLowerCase();
 
   for (const entry of index.decisions) {
-    const content = await readTextFile(`${decisionsDir}/${entry.filePath.split("/").pop()}`);
+    const content = await readTextFile(join(decisionsDir, basename(entry.filePath)));
     if (!content.ok) continue;
 
     if (content.value.toLowerCase().includes(kw)) {
